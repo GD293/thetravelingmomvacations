@@ -1,25 +1,27 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// eslint.config.mjs
+import { FlatCompat } from '@eslint/eslintrc';
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: import.meta.dirname,
 });
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default [
+  // Ignore patterns (replaces .eslintignore)
   {
     ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
+      '.next/**',
+      'next-env.d.ts',
     ],
   },
-];
 
-export default eslintConfig;
+  // Next.js recommended rules (equivalent to "extends: next/core-web-vitals")
+  ...compat.extends('next/core-web-vitals'),
+
+  // Allow Next's generated triple-slash refs in d.ts files
+  {
+    files: ['**/*.d.ts', 'next-env.d.ts'],
+    rules: {
+      '@typescript-eslint/triple-slash-reference': 'off',
+    },
+  },
+];
