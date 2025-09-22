@@ -1,0 +1,15 @@
+# Ensure no nested node_modules
+Remove-Item -Recurse -Force .\src\node_modules 2>$null
+
+# Write .gitignore at project root
+@"
+node_modules/
+**/node_modules/
+.next/
+out/
+.vercel/
+.turbo/
+.env
+.env*.local
+*.log
+"@ | Set-Content -Encoding UTF8 .gitignore
